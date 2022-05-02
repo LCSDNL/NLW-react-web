@@ -4,7 +4,6 @@ import { ChatTeardropDots } from 'phosphor-react';
 
 export function Widget(){
 
-
     return (
         <Popover className="absolute bottom-4 right-4">
             <Popover.Panel>Hello World!</Popover.Panel>
