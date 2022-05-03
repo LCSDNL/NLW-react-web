@@ -8,15 +8,23 @@ const feedbackTypes={
     Bug:{
         title: "Problema",
         image: {
-            source: "",
-            alt: ""
+            source: bugImageUrl,
+            alt: "Imagem de minhoquinha"
         }
     },
     IDEIA:{
         title: "Ideia",
+        image: {
+            source: ideaImageUrl,
+            alt: "Imagem de lâmpada"
+        }
     },
     OTHER:{
         title: "Outro",
+        image: {
+            source: thoughtImageUrl,
+            alt: "Imagem de balão de pensamento"
+        }
     },
 };
 
