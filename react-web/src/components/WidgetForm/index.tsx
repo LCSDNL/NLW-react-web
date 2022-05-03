@@ -48,7 +48,7 @@ export function WidgetForm(){
             {!feedbackType ? (
                 <FeedbackTypeStep onFeedbackTypeChanged={setFeedbackType}/>
             ) : (
-                <FeedbackContentStep />
+                <FeedbackContentStep feedbackType={feedbackType}/>
             )}
 
 
