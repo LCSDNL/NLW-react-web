@@ -9,7 +9,7 @@ interface SubmitFeedbackRequest{
     screenshot: string;
 }
 
-export class SubmitFeedback{
+export class SubmitFeedbackService{
 
     constructor(
         private feedbacksRepository: FeedbacksRepository

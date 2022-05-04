@@ -1,3 +1,5 @@
+import { SubmitFeedbackService } from './services/submit-feedback-service';
+import { PrismaFeedbacksRepository } from './repositories/prisma/prisma-feedbacks-repository';
 import express from 'express';
 import nodemailer from 'nodemailer'
 import { prisma } from './prisma'; 
@@ -17,20 +19,27 @@ const transport = nodemailer.createTransport({
 routes.post('/feedbacks', async (req, res)=>{
     const {type, comment, screenshot}= req.body;
     
-    const feedback = 
+    const prismaFeedbacksRepository= new PrismaFeedbacksRepository()
+    const submitFeedbackService = new SubmitFeedbackService(prismaFeedbacksRepository)
 
-    transport.sendMail({
-        from: 'Gasparzinho <Gasp@ghost.com>',
-        to: 'Lucas Daniel<lucasdanielrambo@gmail.com>',
-        subject:'Novo feedback',
-        html:[
-            `<div style="font-family: sans-serif; font-size: 16px; color: #111">`,
-                `<p>Tipo de feedback: ${type}</p>`,
-                `<p>Comentário: ${comment}</p>`,
-            `</div>`
-        ].join('\n')
-    });
+    await submitFeedbackService.execute({
+        type,
+        comment,
+        screenshot,
+    })
+
+    // transport.sendMail({
+    //     from: 'Gasparzinho <Gasp@ghost.com>',
+    //     to: 'Lucas Daniel<lucasdanielrambo@gmail.com>',
+    //     subject:'Novo feedback',
+    //     html:[
+    //         `<div style="font-family: sans-serif; font-size: 16px; color: #111">`,
+    //             `<p>Tipo de feedback: ${type}</p>`,
+    //             `<p>Comentário: ${comment}</p>`,
+    //         `</div>`
+    //     ].join('\n')
+    // });
 
     
-    return res.status(201).json({data: feedback});
+    return res.status(201).send();
 })
