@@ -1,15 +1,19 @@
 import { SubmitFeedbackService } from "./submit-feedback-service";
 
 
+//Spy functions
+const createFeedbackSpy= jest.fn();
+const sendMailSpy= jest.fn();
+
+
+const submitFeedback= new SubmitFeedbackService(
+    { create: createFeedbackSpy },
+    { sendMail: sendMailSpy },
+)
+
 
 describe('Submit feedback', ()=>{
-
-    const submitFeedback= new SubmitFeedbackService(
-        { create: async ()=>{} },
-        { sendMail: async ()=>{} },
-    )
-
-    
+   
     it('should be able to submit a feedback', async ()=>{
          
         await expect(submitFeedback.execute({
@@ -17,6 +21,10 @@ describe('Submit feedback', ()=>{
             comment:'example',
             screenshot:'data:image/png;base64',
         })).resolves.not.toThrow();
+
+        
+        expect(createFeedbackSpy).toHaveBeenCalled();
+        expect(sendMailSpy).toHaveBeenCalled();
     });
 
     
@@ -27,6 +35,7 @@ describe('Submit feedback', ()=>{
             comment:'example',
             screenshot:'data:image/png;base64',
         })).rejects.toThrow();
+
     });
 
     
