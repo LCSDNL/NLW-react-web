@@ -5,8 +5,8 @@ import { Loading } from "../Loading";
 
 
 interface ScreenshotButtonProps{
-    screenshot: string;
-    onScreenshotTook: (screenshoot: string)=> void;
+    screenshot: string | null;
+    onScreenshotTook: (screenshoot: string | null)=> void;
 }
 
 export function ScreenshotButton({screenshot ,onScreenshotTook}: ScreenshotButtonProps) {
@@ -27,6 +27,7 @@ export function ScreenshotButton({screenshot ,onScreenshotTook}: ScreenshotButto
         return(
             <button
             className="p-1 w-10 h-10 rounded-md border-transparent flex justify-end items-end text-zinc-400 hover:text-zinc-100 transition-colors"
+            onClick={()=>{onScreenshotTook(null)}}
             style={{
                 backgroundImage: `url(${screenshot})`,
             }}
