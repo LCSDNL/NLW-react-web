@@ -1,6 +1,6 @@
 import express from 'express';
 import nodemailer from 'nodemailer'
-import { prisma } from './prisma';
+import { prisma } from './prisma'; 
 
 
 export const routes = express.Router();
@@ -17,13 +17,7 @@ const transport = nodemailer.createTransport({
 routes.post('/feedbacks', async (req, res)=>{
     const {type, comment, screenshot}= req.body;
     
-    const feedback = await prisma.feedbacks.create({
-        data:{
-            type,
-            comment,
-            screenshot,
-        }
-    })
+    const feedback = 
 
     transport.sendMail({
         from: 'Gasparzinho <Gasp@ghost.com>',
