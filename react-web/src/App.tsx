@@ -1,6 +1,6 @@
-import { Widget } from "./components/Widget"
+import { widget } from "./components/widget"
 
 
 export function App(){
-  return <Widget />
+  return <widget />
 }
