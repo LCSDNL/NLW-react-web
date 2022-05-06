@@ -3,6 +3,8 @@ import { View, TextInput, Text, Image, TouchableOpacity } from 'react-native';
 
 import { FeedbackType } from '../Widget';
 import { feedbackTypes } from '../../utils/feedbackTypes';
+import { ScreenshotButton } from '../ScreenshotButton';
+import { Button } from '../Button';
 
 import { ArrowLeft } from 'phosphor-react-native';
 import { theme } from '../../theme';
@@ -46,8 +48,19 @@ export function Form({feedbackType}: Props) {
             style={styles.input}
             placeholder="Conte com detalhes o que está acontecendo..."
             placeholderTextColor={theme.colors.text_secondary}
-        
         />
+
+        <View style={styles.footer}>
+            <ScreenshotButton 
+                onTakeShot={()=>{}}
+                onRemoveShot={()=>{}}
+                screenshot= 'https://github.com/LCSDNL.png'
+            />
+
+            <Button
+                isLoading={false}
+            />
+        </View>
     </View>
 
   );
