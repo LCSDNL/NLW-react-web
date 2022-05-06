@@ -1,7 +1,9 @@
+//React
 import React, { useState }from 'react';
 import { View, TextInput, Text, Image, TouchableOpacity } from 'react-native';
 import { captureScreen } from 'react-native-view-shot'
 
+//SRCs
 import { FeedbackType } from '../Widget';
 import { feedbackTypes } from '../../utils/feedbackTypes';
 import { ScreenshotButton } from '../ScreenshotButton';
@@ -11,6 +13,11 @@ import { ArrowLeft } from 'phosphor-react-native';
 import { theme } from '../../theme';
 import { styles } from './styles';
 
+//API
+import { api } from '../../libs/api';
+import * as FileSystem from 'expo-file-system'
+///////////////////////////////////////////////////////////////////////////////////////
+
 
 interface Props{
     feedbackType: FeedbackType
@@ -19,15 +26,18 @@ interface Props{
 }
 
 export function Form({feedbackType, onFeedbackCanceled, onFeedbackSent}: Props) {
+    //States
     const [screenshot, setScreenshot]= useState<string | null>(null);
+    const [isSendingFeedback, setIsSendingFeedback]= useState(false);
+    const [comment, setComment]= useState('');
     
     const feedbackTypeInfo= feedbackTypes[feedbackType];
 
-
+    //functions
     function handleScreenshot(){
         captureScreen({
             format: 'jpg',
-            quality: 0.8
+            quality: 0.1
         })
         .then(uri => setScreenshot(uri))
         .catch(error=> console.log(error));
@@ -35,7 +45,31 @@ export function Form({feedbackType, onFeedbackCanceled, onFeedbackSent}: Props) 
     function handleScreenshotRemove(){
         setScreenshot(null);
     }
+    async function handleSendFeedback() {
+        if(isSendingFeedback){
+            return
+        }
 
+        setIsSendingFeedback(true);
+        const screenshotBase64 = screenshot && await FileSystem.readAsStringAsync(screenshot, { encoding: 'base64' })
+
+        try {
+            await api.post('/feedbacks', {
+                type: feedbackType, 
+                screenshot: `data:image/png;base64,${screenshotBase64}`,
+                comment,
+            })
+
+            onFeedbackSent();
+            
+        } catch (error) {
+            console.log(error);
+            setIsSendingFeedback(false);
+        }
+    }
+
+
+//return
   return (
     <View style={styles.container}>
         <View style={styles.header}>
@@ -65,6 +99,7 @@ export function Form({feedbackType, onFeedbackCanceled, onFeedbackSent}: Props) 
             style={styles.input}
             placeholder="Conte com detalhes o que está acontecendo..."
             placeholderTextColor={theme.colors.text_secondary}
+            onChangeText={setComment}
         />
 
         <View style={styles.footer}>
@@ -75,7 +110,8 @@ export function Form({feedbackType, onFeedbackCanceled, onFeedbackSent}: Props) 
             />
 
             <Button
-                isLoading={false}
+            onPress={handleSendFeedback}
+                isLoading={isSendingFeedback}
             />
         </View>
     </View>
